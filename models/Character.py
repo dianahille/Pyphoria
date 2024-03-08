@@ -24,6 +24,13 @@ class Model:
         self.data_file_name: str = f"data/characters-{self.account_id}.json"
         helper.files.create_path_and_file(self.data_file_name)
         self.data = helper.files.read_json(self.data_file_name)
+        self.base_character_data = {
+            "level": 1,
+            "experience": 0,
+            "energy": 10,
+            "gold": 0,
+            "base_stats": {"strength": 1, "dexterity": 1, "intelligence": 1},
+        }
 
     def check_name_available(self: Self, name: str, surname: str) -> bool:
         """Iterate over the items in the dictionary and check if the full name of the character is equal to the name and surname passed as arguments. If it is, return False. If the loop finishes, return True."""
@@ -41,16 +48,21 @@ class Model:
             print("Name already taken.")
             return
         character_id = str(uuid.uuid4())
+        inventory = None
         self.data[character_id] = {
             "id": character_id,
             "name": name,
             "surname": surname,
-            "level": 1,
-            "experience": 0,
-            "energy": 10,
-            "gold": 0,
-            "inventory": [],
+            inventory: inventory,
+            **self.base_character_data,
         }
+        self.save()
+
+    def modify(self: Self, character_id: uuid, character_data: dict) -> None:
+        """Modify the character with the character_id passed as argument."""
+        # TODO add data verfication using pydantic
+        character_data.delete("character_id")
+        self.data[character_id].update(character_data)
         self.save()
 
     def load(self: Self, character_id: uuid) -> dict:

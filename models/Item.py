@@ -18,32 +18,35 @@ from typing import Self
 class Model:
     def __init__(self: Self) -> None:
         """Initialize the class with the data_file_name. If the file does not exist, create it."""
-        self.data_file_name: str = f"data/items.json"
+        self.data_file_name: str = "data/items.json"
         helper.files.create_path_and_file(self.data_file_name)
         self.data = helper.files.read_json(self.data_file_name)
+        self.base_item_data = {
+            "requirements": {
+                "level": 1,
+                "strength": 1,
+                "dexterity": 1,
+                "intelligence": 1,
+            },
+            "base_damage": {"physical": {"min": 1, "max": 1}},
+            "icon": "",
+        }
 
     def create(
         self: Self,
         name: str,
         description: str,
-        requirements: dict = {
-            "level": 1,
-            "strength": 1,
-            "dexterity": 1,
-            "intelligence": 1,
-        },
-        base_damage: dict = {"physical": {"min": 1, "max": 1}},
-        icon: str = "",
+        item_data: dict = {},
     ) -> None:
         """Create a new monster."""
         item_id = str(uuid.uuid4())
+        _item_data = self.base_item_data.copy()
+        _item_data.update(item_data)
         self.data[item_id] = {
             "id": item_id,
             "name": name,
             "description": description,
-            "requirements": requirements,
-            "base_damage": base_damage,
-            "icon": icon,
+            **_item_data,
         }
         self.save()
 

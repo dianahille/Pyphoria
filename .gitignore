@@ -1,3 +1,4 @@
 /data
 *.pyc
 .gitconfig
+__pycache__
