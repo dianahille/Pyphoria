@@ -26,8 +26,8 @@ class Model:
         self.data = helper.files.read_json(self.data_file_name)
 
     def check_name_available(self: Self, name: str, surname: str) -> bool:
-        for character_id, character in self.data.items():
-            if f"{character['name']} {character['surname']}" == f"{name} {surname}":
+        for character_id in self.data.items():
+            if f"{self.get_full_name(character_id=character_id)}" == f"{name} {surname}":
                 return False
         return True
 
@@ -53,3 +53,7 @@ class Model:
 
     def save(self: Self) -> None:
         helper.files.write_json(self.data_file_name, self.data)
+
+    def get_full_name(self: Self, character_id: uuid) -> str:
+        character = self.data[character_id]
+        return f"{character['name']} {character['surname']}"
