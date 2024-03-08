@@ -1,8 +1,8 @@
-import helper.files
 import uuid
-
 from typing import Self
 
+import helper.files
+from models.Inventory import Model as Inventory
 
 # from pydantic import BaseModel, PositiveInt
 
@@ -21,14 +21,14 @@ class Model:
     def __init__(self: Self, account_id: uuid) -> None:
         """Initialize the class with the account_id and the data_file_name. If the file does not exist, create it."""
         self.account_id: uuid = account_id
-        self.data_file_name: str = f"data/characters-{self.account_id}.json"
+        self.data_file_name: str = f"data/characters/characters-{self.account_id}.json"
         helper.files.create_path_and_file(self.data_file_name)
         self.data = helper.files.read_json(self.data_file_name)
         self.base_character_data = {
+            "account_id": self.account_id,
             "level": 1,
             "experience": 0,
             "energy": 10,
-            "gold": 0,
             "base_stats": {"strength": 1, "dexterity": 1, "intelligence": 1},
         }
 
@@ -48,12 +48,12 @@ class Model:
             print("Name already taken.")
             return
         character_id = str(uuid.uuid4())
-        inventory = None
+        inventory = Inventory(character_id)
         self.data[character_id] = {
-            "id": character_id,
+            "character_id": character_id,
             "name": name,
             "surname": surname,
-            inventory: inventory,
+            "inventory": inventory.data["inventory_id"],
             **self.base_character_data,
         }
         self.save()
