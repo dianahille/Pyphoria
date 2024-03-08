@@ -26,10 +26,12 @@ class Model:
         self.data = helper.files.read_json(self.data_file_name)
 
     def check_name_available(self: Self, name: str, surname: str) -> bool:
+        # Iterate over the items in the dictionary and check if the full name of the character is equal to the name and surname passed as arguments. If it is, return False. If the loop finishes, return True.
         for character_id in self.data.items():
             if f"{self.get_full_name(character_id=character_id)}" == f"{name} {surname}":
                 return False
         return True
+    
 
     def create(self: Self, name: str, surname: str) -> None:
         if not self.check_name_available(name, surname):
