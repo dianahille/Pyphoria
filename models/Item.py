@@ -22,6 +22,11 @@ class Model:
         helper.files.create_path_and_file(self.data_file_name)
         self.data = helper.files.read_json(self.data_file_name)
         self.base_item_data = {
+            "type": "weapon",
+            "stackable": False,
+            "max_stack": 100,
+            "unique_store": False,
+            "unique_equipped": False,
             "requirements": {
                 "level": 1,
                 "strength": 1,
@@ -58,7 +63,7 @@ class Model:
         self.save()
 
     def load(self: Self, item_id: uuid) -> dict:
-        """Return the monster with the monster_id passed as argument."""
+        """Return the Item with the item_id passed as argument."""
         return self.data[item_id]
 
     def save(self: Self) -> None:
