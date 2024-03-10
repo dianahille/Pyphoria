@@ -1,0 +1,15 @@
+{"character_id": "character_id",
+"name": "name",
+"surname": "surname",
+"experience": "experience",
+"level": "level",
+"fame": "fame",
+"stats": {
+    "vitality": "vitality",
+    "#luck": "Erhöht die Chance bessere Items zu craften oder zu finden",
+    "luck": "luck",
+    "intelligence": "intelligence",
+    "#combat": "Generische Kampfstärke (Nahkampf, Fernkampf, Magie)",
+    "combat": "combat",
+    "hit_rating": "hit_rating",
+    "#hit_rating": "base_hit_rating für $waffentyp + charakter hit_rating (+ item_stats hit rating, nötig für besonders schwere gegner)"}}
