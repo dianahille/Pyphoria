@@ -1,2 +1,2 @@
-sqlalchemy
+sqlmodel
 pydantic

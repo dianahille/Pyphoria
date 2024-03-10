@@ -1,5 +1,7 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import ConfigDict
+from sqlmodel import SQLModel
 
 
-class StrictBaseModel(BaseModel):
-    model_config = ConfigDict(strict=True)
+class StrictBaseModel(SQLModel):
+    class Config(ConfigDict):
+        strict = True

@@ -2,6 +2,7 @@ import uuid
 from typing import Self
 
 from pydantic import PositiveInt
+from sqlmodel import Field
 
 import helper.files
 from models import StrictBaseModel
@@ -9,19 +10,19 @@ from models.Item import Model as Items
 
 
 class InventoryExtensionModel(StrictBaseModel):
-    extension_id: uuid.UUID
+    id: uuid.UUID
     slots: PositiveInt
     name: str
     description: str
     icon: str
 
 class InventoryModel(StrictBaseModel):
-    inventory_id: uuid.UUID
-    character_id: uuid.UUID
+    id: uuid.UUID
+    character_id: uuid.UUID = Field(default=None, foreign_key="characters.id")
     slots: PositiveInt
     items: list[uuid.UUID]
     gold: PositiveInt
-    extensions: list[uuid.UUID]
+    extensions: list["InventoryExtensionModel"] = Field(default=None, foreign_key="inventory_extension.id")
 
 class Model:
     def __init__(self: Self, character_id: uuid) -> None:

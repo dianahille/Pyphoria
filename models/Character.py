@@ -2,34 +2,34 @@ import uuid
 from typing import Self
 
 from pydantic import PositiveInt
+from sqlmodel import Field
 
 import helper.files
 from models import StrictBaseModel
 from models.Inventory import Model as Inventory
 
 
-class CaracterStatsModel(StrictBaseModel):
+class SpeciesModel(StrictBaseModel, table=True):
+    name: str = Field(default=None, primary_key=True)
+    description: str
+    icon: str
+    base_strength: PositiveInt
+    base_dexterity: PositiveInt
+    base_intelligence: PositiveInt
+
+class CharacterModel(StrictBaseModel, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    account_id: uuid.UUID = Field(default=None, foreign_key="accounts.id")
+    species: uuid.UUID = Field(default=None, foreign_key="species.name")
+    name: str
+    surname: str
+    level: PositiveInt = 1
+    experience: PositiveInt = 0
+    energy: PositiveInt
+    inventory: uuid.UUID = Field(default=None, foreign_key="inventory.inventory_id")
     strength: PositiveInt
     dexterity: PositiveInt
     intelligence: PositiveInt
-
-class SpeciesModel(StrictBaseModel):
-    name: str
-    description: str
-    icon: str
-    base_stats: CaracterStatsModel
-
-class CharacterModel(StrictBaseModel):
-    id: uuid.UUID
-    account_id: uuid.UUID
-    species: SpeciesModel
-    name: str
-    surname: str
-    level: PositiveInt
-    experience: PositiveInt
-    energy: PositiveInt
-    inventory: uuid.UUID
-    stats: CaracterStatsModel
 
 
 class Model:
