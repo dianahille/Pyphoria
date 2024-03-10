@@ -4,15 +4,16 @@ import uuid
 from typing import Self
 
 
-# from pydantic import BaseModel, PositiveInt
+from pydantic import BaseModel, PositiveInt
 
-# class MonsterModel(BaseModel):
-#     id: uuid.UUID
-#     name: str
-#     description: str
-#     level: PositiveInt
-#     experience: PositiveInt
-#     gold: PositiveInt
+
+class MonsterModel(BaseModel):
+    id: uuid.UUID
+    name: str
+    description: str
+    level: PositiveInt
+    base_damage: PositiveInt
+    icon: str
 
 
 class Model:

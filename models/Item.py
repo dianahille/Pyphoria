@@ -1,18 +1,34 @@
-import helper.files
 import uuid
-
 from typing import Self
 
+from pydantic import BaseModel, PositiveInt
 
-# from pydantic import BaseModel, PositiveInt
+import helper.files
 
-# class MonsterModel(BaseModel):
-#     id: uuid.UUID
-#     name: str
-#     description: str
-#     level: PositiveInt
-#     experience: PositiveInt
-#     gold: PositiveInt
+
+class DamageModel(BaseModel):
+    physical: tuple[PositiveInt, PositiveInt]
+
+
+class ItemRequirementsModel(BaseModel):
+    level: PositiveInt
+    strength: PositiveInt
+    dexterity: PositiveInt
+    intelligence: PositiveInt
+
+
+class ItemModel(BaseModel):
+    id: uuid.UUID
+    name: str
+    type: str
+    description: str
+    stackable: bool
+    max_stack: PositiveInt
+    unique_store: bool
+    unique_equipped: bool
+    requirements: ItemRequirementsModel
+    base_damage: dict[str, DamageModel]
+    icon: str
 
 
 class Model:
