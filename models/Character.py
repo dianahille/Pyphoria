@@ -1,20 +1,36 @@
 import uuid
 from typing import Self
 
+from pydantic import PositiveInt
+
 import helper.files
+from models import StrictBaseModel
 from models.Inventory import Model as Inventory
 
-# from pydantic import BaseModel, PositiveInt
 
-# class CharacterModel(BaseModel):
-#     id: uuid.UUID
-#     name: str
-#     surname: str
-#     level: PositiveInt
-#     experience: PositiveInt
-#     energy: PositiveInt
-#     gold: PositiveInt
-#     inventory: list
+class CaracterStatsModel(StrictBaseModel):
+    strength: PositiveInt
+    dexterity: PositiveInt
+    intelligence: PositiveInt
+
+class RaceModel(StrictBaseModel):
+    name: str
+    description: str
+    icon: str
+    base_stats: CaracterStatsModel
+
+class CharacterModel(StrictBaseModel):
+    id: uuid.UUID
+    account_id: uuid.UUID
+    race: RaceModel
+    name: str
+    surname: str
+    level: PositiveInt
+    experience: PositiveInt
+    energy: PositiveInt
+    gold: PositiveInt
+    inventory: uuid.UUID
+    stats: CaracterStatsModel
 
 
 class Model:
