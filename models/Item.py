@@ -6,7 +6,7 @@ from pydantic import BaseModel, PositiveInt
 import helper.files
 
 
-class DamageModel(BaseModel):
+class ItemDamageModel(BaseModel):
     physical: tuple[PositiveInt, PositiveInt]
 
 
@@ -27,7 +27,7 @@ class ItemModel(BaseModel):
     unique_store: bool
     unique_equipped: bool
     requirements: ItemRequirementsModel
-    base_damage: dict[str, DamageModel]
+    base_damage: dict[str, ItemDamageModel]
     icon: str
 
 

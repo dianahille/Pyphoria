@@ -1,19 +1,27 @@
 import uuid
 from typing import Self
 
+from pydantic import PositiveInt
+
 import helper.files
+from models import StrictBaseModel
 from models.Item import Model as Items
 
-# from pydantic import BaseModel, PositiveInt
 
-# class MonsterModel(BaseModel):
-#     id: uuid.UUID
-#     name: str
-#     description: str
-#     level: PositiveInt
-#     experience: PositiveInt
-#     gold: PositiveInt
+class InventoryExtensionModel(StrictBaseModel):
+    extension_id: uuid.UUID
+    slots: PositiveInt
+    name: str
+    description: str
+    icon: str
 
+class InventoryModel(StrictBaseModel):
+    inventory_id: uuid.UUID
+    character_id: uuid.UUID
+    slots: PositiveInt
+    items: list[uuid.UUID]
+    gold: PositiveInt
+    extensions: list[uuid.UUID]
 
 class Model:
     def __init__(self: Self, character_id: uuid) -> None:

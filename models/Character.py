@@ -13,7 +13,7 @@ class CaracterStatsModel(StrictBaseModel):
     dexterity: PositiveInt
     intelligence: PositiveInt
 
-class RaceModel(StrictBaseModel):
+class SpeciesModel(StrictBaseModel):
     name: str
     description: str
     icon: str
@@ -22,13 +22,12 @@ class RaceModel(StrictBaseModel):
 class CharacterModel(StrictBaseModel):
     id: uuid.UUID
     account_id: uuid.UUID
-    race: RaceModel
+    species: SpeciesModel
     name: str
     surname: str
     level: PositiveInt
     experience: PositiveInt
     energy: PositiveInt
-    gold: PositiveInt
     inventory: uuid.UUID
     stats: CaracterStatsModel
 
