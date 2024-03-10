@@ -1,10 +1,9 @@
-import helper.files
 import uuid
-
 from typing import Self
 
-
 from pydantic import BaseModel, PositiveInt
+
+import helper.files
 
 
 class MonsterModel(BaseModel):
@@ -19,7 +18,7 @@ class MonsterModel(BaseModel):
 class Model:
     def __init__(self: Self) -> None:
         """Initialize the class with the account_id and the data_file_name. If the file does not exist, create it."""
-        self.data_file_name: str = f"data/monsters.json"
+        self.data_file_name: str = "data/monsters.json"
         helper.files.create_path_and_file(self.data_file_name)
         self.data = helper.files.read_json(self.data_file_name)
 
