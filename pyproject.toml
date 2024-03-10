@@ -4,30 +4,39 @@ description = "fixme"
 version = "0.0.1"
 
 readme = "README.md"
-authors = [
-  {name = "Diana"},
-  {name = "Max"},
-  {name = "Oluf"},
-]
-license = {text = "MIT License"}
+authors = [{ name = "Diana" }, { name = "Max" }, { name = "Oluf" }]
+license = { text = "MIT License" }
 
 requires-python = ">=3.11"
-dependencies = [
-    "pydantic",
-]
+dependencies = ["pydantic"]
 
 [build-system]
 build-backend = 'setuptools.build_meta'
-requires = [
-    'setuptools',
-]
+requires = ['setuptools']
 
 [tool.ruff]
+# Same as Black.
+line-length = 88
+indent-width = 4
+
+target-version = "py311"
+
+
+[tool.ruff.format]
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
 [tool.ruff.lint]
+fixable = ["ALL"]
 select = ["ALL"]
 ignore = [
-    "D407", # Missing dashed underline after section ("Returns") # formatting docstrings
-    "FA102", # future-required-type-annotation (FA102) # we dont use old python
-    "UP015", # Unnecessary open mode parameters
+    "D407",   # Missing dashed underline after section ("Returns") # formatting docstrings
+    "FA102",  # future-required-type-annotation (FA102) # we dont use old python
+    "UP015",  # Unnecessary open mode parameters
     "PTH123", # `open()` should be replaced by `Path.open()`
+    "E501",   # line too long, handled by black
+    "D211",   # no-blank-line-before-class
+    "D212",   # multi-line-summary-first-line
 ]

@@ -1,12 +1,13 @@
 import uuid
 from typing import Self
 
-from pydantic import BaseModel, PositiveInt
+from pydantic import PositiveInt
 
 import helper.files
+from models import StrictBaseModel
 
 
-class MonsterModel(BaseModel):
+class MonsterModel(StrictBaseModel):
     id: uuid.UUID
     name: str
     description: str
@@ -17,7 +18,11 @@ class MonsterModel(BaseModel):
 
 class Model:
     def __init__(self: Self) -> None:
-        """Initialize the class with the account_id and the data_file_name. If the file does not exist, create it."""
+        """
+        Initialize the class with the account_id and the data_file_name.
+
+        If the file does not exist, create it.
+        """
         self.data_file_name: str = "data/monsters.json"
         helper.files.create_path_and_file(self.data_file_name)
         self.data = helper.files.read_json(self.data_file_name)
@@ -31,22 +36,22 @@ class Model:
         icon: str = "",
     ) -> None:
         """Create a new monster."""
-        monster_id = str(uuid.uuid4())
-        self.data[monster_id] = {
-            "id": monster_id,
-            "name": name,
-            "description": description,
-            "level": level,
-            "base_damage": base_damage,
-            "icon": icon,
-        }
+        monster_id = uuid.uuid4()
+        self.data[str(monster_id)] = MonsterModel(
+            id=monster_id,
+            name=name,
+            description=description,
+            level=level,
+            base_damage=base_damage,
+            icon=icon,
+        ).model_dump()
         self.save()
 
-    def modify(self: Self, monster_id: uuid, monster_data: dict) -> None:
+    def modify(self: Self, id: uuid, monster_data: dict) -> None:
         """Modify the monster with the monster_id passed as argument."""
-        # TODO add data verfication using pydantic
-        monster_data.delete("monster_id")
-        self.data[monster_id].update(monster_data)
+        MonsterModel(id=id, **monster_data)
+        self.data.pop(str(id), None)
+        self.data[str(id)] = monster_data
         self.save()
 
     def load(self: Self, monster_id: uuid) -> dict:
@@ -56,3 +61,7 @@ class Model:
     def save(self: Self) -> None:
         """Save the data to the file."""
         helper.files.write_json(self.data_file_name, self.data)
+
+    def list(self: Self) -> dict:
+        """Return the list of monsters."""
+        return self.data
