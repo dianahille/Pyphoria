@@ -1,4 +1,5 @@
 import uuid
+from dataclasses import Field
 from typing import Self
 
 from pydantic import PositiveInt
@@ -8,7 +9,7 @@ from models import StrictBaseModel
 
 
 class MonsterModel(StrictBaseModel):
-    id: uuid.UUID
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     name: str
     description: str
     level: PositiveInt
