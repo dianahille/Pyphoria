@@ -1,24 +1,23 @@
 import uuid
 from typing import Self
 
-from pydantic import PositiveInt
-from sqlmodel import Field, List
-
-import pyphoria.helper.files
-from models import StrictBaseModel
 from models.Item import ItemModel
 from models.Item import Model as Items
+from pydantic import PositiveInt
+from sqlmodel import Field, List, SQLModel
+
+import pyphoria.helper.files
 
 
-class InventoryExtensionModel(StrictBaseModel):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+class InventoryExtensionModel(SQLModel):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True, unique=True)
     slots: PositiveInt
-    name: str
+    name: str = Field(max_length=50, unique=True, index=True)
     description: str
     icon: str
 
-class InventoryModel(StrictBaseModel):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+class InventoryModel(SQLModel):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True, unique=True)
     character_id: uuid.UUID = Field(default=None, foreign_key="characters.id")
     slots: PositiveInt
     items: List["ItemModel"]

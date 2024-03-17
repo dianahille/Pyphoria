@@ -1,15 +1,14 @@
 import uuid
 from typing import Self
 
+from models.Inventory import Model as Inventory
 from pydantic import PositiveInt
-from sqlmodel import Field
+from sqlmodel import Field, SQLModel
 
 import pyphoria.helper.files
-from models import StrictBaseModel
-from models.Inventory import Model as Inventory
 
 
-class CharacterStatsModel(StrictBaseModel, table=False):
+class CharacterStatsModel(SQLModel, table=False):
     vitality: PositiveInt
     luck: PositiveInt
     intelligence: PositiveInt
@@ -18,8 +17,9 @@ class CharacterStatsModel(StrictBaseModel, table=False):
     dodge_rating: PositiveInt
 
 
-class SpeciesModel(StrictBaseModel, table=True):
-    name: str = Field(default=None, primary_key=True)
+class SpeciesModel(SQLModel, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True, unique=True)
+    name: str = Field(default=None, unique=True, index=True)
     description: str
     icon: str
     base_strength: PositiveInt
@@ -27,11 +27,11 @@ class SpeciesModel(StrictBaseModel, table=True):
     base_intelligence: PositiveInt
 
 
-class CharacterModel(StrictBaseModel, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+class CharacterModel(SQLModel, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True, unique=True)
     account_id: uuid.UUID = Field(default=None, foreign_key="accounts.id")
     species: uuid.UUID = Field(default=None, foreign_key="species.name")
-    name: str
+    name: str = Field(max_length=50, unique=True, index=True)
     surname: str
     level: PositiveInt = 1
     experience: PositiveInt = 0

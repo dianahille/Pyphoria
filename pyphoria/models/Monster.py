@@ -1,16 +1,15 @@
 import uuid
-from dataclasses import Field
 from typing import Self
 
 from pydantic import PositiveInt
+from sqlmodel import Field, SQLModel
 
-import pyphoria.pyphoria.helper.files
-from models import StrictBaseModel
+import pyphoria.helper.files
 
 
-class MonsterModel(StrictBaseModel):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    name: str
+class MonsterModel(SQLModel, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True, unique=True)
+    name: str = Field(max_length=50, unique=True, index=True)
     description: str
     level: PositiveInt
     base_damage: PositiveInt

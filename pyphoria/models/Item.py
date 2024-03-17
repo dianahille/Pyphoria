@@ -1,27 +1,27 @@
 import uuid
-from dataclasses import Field
 from typing import Self
 
-from pydantic import BaseModel, PositiveInt
+from pydantic import PositiveInt
+from sqlmodel import Field, SQLModel
 
 import pyphoria.helper.files
 
 
-class ItemDamageModel(BaseModel):
+class ItemDamageModel(SQLModel):
     physical: tuple[PositiveInt, PositiveInt]
     fire: tuple[PositiveInt, PositiveInt]
 
 
-class ItemRequirementsModel(BaseModel):
+class ItemRequirementsModel(SQLModel):
     level: PositiveInt
     strength: PositiveInt
     dexterity: PositiveInt
     intelligence: PositiveInt
 
 
-class ItemModel(BaseModel):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    name: str
+class ItemModel(SQLModel):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True, unique=True)
+    name: str = Field(max_length=50, unique=True, index=True)
     type: str
     description: str
     stackable: bool
