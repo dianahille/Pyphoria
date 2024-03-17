@@ -7,12 +7,21 @@ readme = "README.md"
 authors = [{ name = "Diana" }, { name = "Max" }, { name = "Oluf" }]
 license = { text = "MIT License" }
 
-requires-python = ">=3.11"
-dependencies = ["pydantic"]
+[tool.poetry]
+name = "pyphoria"
+version = "0.1.0"
+description = ""
+authors = ["Oluf Lorenzen <finkregh@mafia-server.net>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+sqlmodel = "^0.0.16"
+
 
 [build-system]
-build-backend = 'setuptools.build_meta'
-requires = ['setuptools']
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 # Same as Black.

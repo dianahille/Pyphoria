@@ -1,13 +1,15 @@
 import uuid
+from dataclasses import Field
 from typing import Self
 
 from pydantic import BaseModel, PositiveInt
 
-import helper.files
+import pyphoria.helper.files
 
 
 class ItemDamageModel(BaseModel):
     physical: tuple[PositiveInt, PositiveInt]
+    fire: tuple[PositiveInt, PositiveInt]
 
 
 class ItemRequirementsModel(BaseModel):
@@ -18,7 +20,7 @@ class ItemRequirementsModel(BaseModel):
 
 
 class ItemModel(BaseModel):
-    id: uuid.UUID
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     name: str
     type: str
     description: str
@@ -35,8 +37,8 @@ class Model:
     def __init__(self: Self) -> None:
         """Initialize the class with the data_file_name. If the file does not exist, create it."""
         self.data_file_name: str = "data/items.json"
-        helper.files.create_path_and_file(self.data_file_name)
-        self.data = helper.files.read_json(self.data_file_name)
+        pyphoria.helper.files.create_path_and_file(self.data_file_name)
+        self.data = pyphoria.helper.files.read_json(self.data_file_name)
         self.base_item_data = {
             "type": "weapon",
             "stackable": False,
@@ -84,4 +86,4 @@ class Model:
 
     def save(self: Self) -> None:
         """Save the data to the file."""
-        helper.files.write_json(self.data_file_name, self.data)
+        pyphoria.helper.files.write_json(self.data_file_name, self.data)

@@ -6,7 +6,7 @@
 "fame": "fame",
 "stats": {
     "vitality": "vitality",
-    "#luck": "Erhöht die Chance bessere Items zu craften oder zu finden",
+    "#luck": "Erhöht die Chance bessere Items zu craften oder zu finden, erhöht ebenfalls die Crit-Chance",
     "luck": "luck",
     "intelligence": "intelligence",
     "#combat": "Generische Kampfstärke (Nahkampf, Fernkampf, Magie)",

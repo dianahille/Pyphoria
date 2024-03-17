@@ -2,25 +2,26 @@ import uuid
 from typing import Self
 
 from pydantic import PositiveInt
-from sqlmodel import Field
+from sqlmodel import Field, List
 
-import helper.files
+import pyphoria.helper.files
 from models import StrictBaseModel
+from models.Item import ItemModel
 from models.Item import Model as Items
 
 
 class InventoryExtensionModel(StrictBaseModel):
-    id: uuid.UUID
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     slots: PositiveInt
     name: str
     description: str
     icon: str
 
 class InventoryModel(StrictBaseModel):
-    id: uuid.UUID
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     character_id: uuid.UUID = Field(default=None, foreign_key="characters.id")
     slots: PositiveInt
-    items: list[uuid.UUID]
+    items: List["ItemModel"]
     gold: PositiveInt
     extensions: list["InventoryExtensionModel"] = Field(default=None, foreign_key="inventory_extension.id")
 
@@ -29,8 +30,8 @@ class Model:
         """Initialize the class with the data_file_name. If the file does not exist, create it."""
         self.data_file_name: str = f"data/inventories/inventory-{character_id}.json"
         self.character_id: uuid = character_id
-        helper.files.create_path_and_file(self.data_file_name)
-        self.data = helper.files.read_json(self.data_file_name)
+        pyphoria.helper.files.create_path_and_file(self.data_file_name)
+        self.data = pyphoria.helper.files.read_json(self.data_file_name)
         self.base_inventory_data = {
             "slots": 10,
             "items": [],
@@ -82,4 +83,4 @@ class Model:
 
     def save(self: Self) -> None:
         """Save the data to the file."""
-        helper.files.write_json(self.data_file_name, self.data)
+        pyphoria.helper.files.write_json(self.data_file_name, self.data)

@@ -3,7 +3,7 @@ from typing import Self
 
 from pydantic import PositiveInt
 
-import helper.files
+import pyphoria.pyphoria.helper.files
 from models import StrictBaseModel
 
 
@@ -24,8 +24,8 @@ class Model:
         If the file does not exist, create it.
         """
         self.data_file_name: str = "data/monsters.json"
-        helper.files.create_path_and_file(self.data_file_name)
-        self.data = helper.files.read_json(self.data_file_name)
+        pyphoria.helper.files.create_path_and_file(self.data_file_name)
+        self.data = pyphoria.helper.files.read_json(self.data_file_name)
 
     def create(
         self: Self,
@@ -60,7 +60,7 @@ class Model:
 
     def save(self: Self) -> None:
         """Save the data to the file."""
-        helper.files.write_json(self.data_file_name, self.data)
+        pyphoria.helper.files.write_json(self.data_file_name, self.data)
 
     def list(self: Self) -> dict:
         """Return the list of monsters."""

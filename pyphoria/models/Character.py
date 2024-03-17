@@ -4,9 +4,18 @@ from typing import Self
 from pydantic import PositiveInt
 from sqlmodel import Field
 
-import helper.files
+import pyphoria.helper.files
 from models import StrictBaseModel
 from models.Inventory import Model as Inventory
+
+
+class CharacterStatsModel(StrictBaseModel, table=False):
+    vitality: PositiveInt
+    luck: PositiveInt
+    intelligence: PositiveInt
+    combat: PositiveInt
+    hit_rating: PositiveInt
+    dodge_rating: PositiveInt
 
 
 class SpeciesModel(StrictBaseModel, table=True):
@@ -16,6 +25,7 @@ class SpeciesModel(StrictBaseModel, table=True):
     base_strength: PositiveInt
     base_dexterity: PositiveInt
     base_intelligence: PositiveInt
+
 
 class CharacterModel(StrictBaseModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
@@ -30,6 +40,7 @@ class CharacterModel(StrictBaseModel, table=True):
     strength: PositiveInt
     dexterity: PositiveInt
     intelligence: PositiveInt
+    stats: CharacterStatsModel
 
 
 class Model:
@@ -37,8 +48,8 @@ class Model:
         """Initialize the class with the account_id and the data_file_name. If the file does not exist, create it."""
         self.account_id: uuid = account_id
         self.data_file_name: str = f"data/characters/characters-{self.account_id}.json"
-        helper.files.create_path_and_file(self.data_file_name)
-        self.data = helper.files.read_json(self.data_file_name)
+        pyphoria.helper.files.create_path_and_file(self.data_file_name)
+        self.data = pyphoria.helper.files.read_json(self.data_file_name)
         self.base_character_data = {
             "account_id": self.account_id,
             "level": 1,
@@ -86,7 +97,7 @@ class Model:
 
     def save(self: Self) -> None:
         """Save the data to the file."""
-        helper.files.write_json(self.data_file_name, self.data)
+        pyphoria.helper.files.write_json(self.data_file_name, self.data)
 
     def get_full_name(self: Self, character_id: uuid) -> str:
         """Return the full name of the character with the character_id passed as argument."""
