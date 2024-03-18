@@ -40,6 +40,7 @@ line-ending = "auto"
 [tool.ruff.lint]
 fixable = ["ALL"]
 select = ["ALL"]
+
 ignore = [
     "D407",   # Missing dashed underline after section ("Returns") # formatting docstrings
     "FA102",  # future-required-type-annotation (FA102) # we dont use old python
@@ -48,4 +49,9 @@ ignore = [
     "E501",   # line too long, handled by black
     "D211",   # no-blank-line-before-class
     "D212",   # multi-line-summary-first-line
+]
+[tool.ruff.lint.per-file-ignores]
+"pyphoria/models/*" = [
+    "UP035",
+    "UP006", # Use `list` instead of `List` for type annotation # required for sqlmodel
 ]
