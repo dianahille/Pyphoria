@@ -1,36 +1,7 @@
-import uuid
+import uuid  # noqa: N999, D100
 from typing import Self
 
-from pydantic import PositiveInt
-from sqlmodel import Field, SQLModel
-
-import pyphoria.helper.files
-
-
-class ItemDamageModel(SQLModel):
-    physical: tuple[PositiveInt, PositiveInt]
-    fire: tuple[PositiveInt, PositiveInt]
-
-
-class ItemRequirementsModel(SQLModel):
-    level: PositiveInt
-    strength: PositiveInt
-    dexterity: PositiveInt
-    intelligence: PositiveInt
-
-
-class ItemModel(SQLModel):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True, unique=True)
-    name: str = Field(max_length=50, unique=True, index=True)
-    type: str
-    description: str
-    stackable: bool
-    max_stack: PositiveInt
-    unique_store: bool
-    unique_equipped: bool
-    requirements: ItemRequirementsModel
-    base_damage: dict[str, ItemDamageModel]
-    icon: str
+import pyphoria
 
 
 class Model:
@@ -75,7 +46,7 @@ class Model:
 
     def modify(self: Self, item_id: uuid, item_data: dict) -> None:
         """Modify the item with the item_id passed as argument."""
-        # TODO add data verfication using pydantic
+        # TODO add data verfication using pydantic  # noqa: FIX002, TD002, TD003, TD004
         item_data.delete("item_id")
         self.data[item_id].update(item_data)
         self.save()

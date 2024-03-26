@@ -1,19 +1,8 @@
 import uuid
 from typing import Self
 
-from pydantic import PositiveInt
-from sqlmodel import Field, SQLModel
-
-import pyphoria.helper.files
-
-
-class MonsterModel(SQLModel, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True, unique=True)
-    name: str = Field(max_length=50, unique=True, index=True)
-    description: str
-    level: PositiveInt
-    base_damage: PositiveInt
-    icon: str
+import pyphoria
+from pyphoria.models import Monster
 
 
 class Model:
@@ -37,7 +26,7 @@ class Model:
     ) -> None:
         """Create a new monster."""
         monster_id = uuid.uuid4()
-        self.data[str(monster_id)] = MonsterModel(
+        self.data[str(monster_id)] = Monster(
             id=monster_id,
             name=name,
             description=description,
@@ -49,7 +38,7 @@ class Model:
 
     def modify(self: Self, id: uuid, monster_data: dict) -> None:
         """Modify the monster with the monster_id passed as argument."""
-        MonsterModel(id=id, **monster_data)
+        Monster(id=id, **monster_data)
         self.data.pop(str(id), None)
         self.data[str(id)] = monster_data
         self.save()

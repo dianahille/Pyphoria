@@ -1,52 +1,14 @@
-import uuid
+import uuid as uuid_pkg
 from typing import Self
 
-from models.Inventory import Model as Inventory
-from pydantic import PositiveInt
-from sqlmodel import Field, SQLModel
-
-import pyphoria.helper.files
-
-
-class CharacterStatsModel(SQLModel, table=False):
-    vitality: PositiveInt
-    luck: PositiveInt
-    intelligence: PositiveInt
-    combat: PositiveInt
-    hit_rating: PositiveInt
-    dodge_rating: PositiveInt
-
-
-class SpeciesModel(SQLModel, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True, unique=True)
-    name: str = Field(default=None, unique=True, index=True)
-    description: str
-    icon: str
-    base_strength: PositiveInt
-    base_dexterity: PositiveInt
-    base_intelligence: PositiveInt
-
-
-class CharacterModel(SQLModel, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True, unique=True)
-    account_id: uuid.UUID = Field(default=None, foreign_key="accounts.id")
-    species: uuid.UUID = Field(default=None, foreign_key="species.name")
-    name: str = Field(max_length=50, unique=True, index=True)
-    surname: str
-    level: PositiveInt = 1
-    experience: PositiveInt = 0
-    energy: PositiveInt
-    inventory: uuid.UUID = Field(default=None, foreign_key="inventory.inventory_id")
-    strength: PositiveInt
-    dexterity: PositiveInt
-    intelligence: PositiveInt
-    stats: CharacterStatsModel
+import pyphoria
+from pyphoria.models import Inventory
 
 
 class Model:
-    def __init__(self: Self, account_id: uuid) -> None:
+    def __init__(self: Self, account_id: uuid_pkg.UUID) -> None:
         """Initialize the class with the account_id and the data_file_name. If the file does not exist, create it."""
-        self.account_id: uuid = account_id
+        self.account_id: uuid_pkg.UUID = account_id
         self.data_file_name: str = f"data/characters/characters-{self.account_id}.json"
         pyphoria.helper.files.create_path_and_file(self.data_file_name)
         self.data = pyphoria.helper.files.read_json(self.data_file_name)
@@ -73,7 +35,7 @@ class Model:
         if not self.check_name_available(name, surname):
             print("Name already taken.")
             return
-        character_id = str(uuid.uuid4())
+        character_id = str(uuid_pkg.uuid4())
         inventory = Inventory(character_id)
         self.data[character_id] = {
             "character_id": character_id,
@@ -84,14 +46,14 @@ class Model:
         }
         self.save()
 
-    def modify(self: Self, character_id: uuid, character_data: dict) -> None:
+    def modify(self: Self, character_id: uuid_pkg.UUID, character_data: dict) -> None:
         """Modify the character with the character_id passed as argument."""
-        # TODO add data verfication using pydantic
+        # TODO add data verfication using pydantic  # noqa: FIX002, TD002, TD003, TD004
         character_data.delete("character_id")
         self.data[character_id].update(character_data)
         self.save()
 
-    def load(self: Self, character_id: uuid) -> dict:
+    def load(self: Self, character_id: uuid_pkg.UUID) -> dict:
         """Return the character with the character_id passed as argument."""
         return self.data[character_id]
 
@@ -99,7 +61,7 @@ class Model:
         """Save the data to the file."""
         pyphoria.helper.files.write_json(self.data_file_name, self.data)
 
-    def get_full_name(self: Self, character_id: uuid) -> str:
+    def get_full_name(self: Self, character_id: uuid_pkg.UUID) -> str:
         """Return the full name of the character with the character_id passed as argument."""
         character = self.data[character_id]
         return f"{character['name']} {character['surname']}"

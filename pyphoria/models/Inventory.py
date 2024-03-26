@@ -1,28 +1,9 @@
 import uuid
 from typing import Self
 
-from models.Item import ItemModel
-from models.Item import Model as Items
-from pydantic import PositiveInt
-from sqlmodel import Field, List, SQLModel
+import pyphoria
+from pyphoria.models import Item
 
-import pyphoria.helper.files
-
-
-class InventoryExtensionModel(SQLModel):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True, unique=True)
-    slots: PositiveInt
-    name: str = Field(max_length=50, unique=True, index=True)
-    description: str
-    icon: str
-
-class InventoryModel(SQLModel):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True, unique=True)
-    character_id: uuid.UUID = Field(default=None, foreign_key="characters.id")
-    slots: PositiveInt
-    items: List["ItemModel"]
-    gold: PositiveInt
-    extensions: list["InventoryExtensionModel"] = Field(default=None, foreign_key="inventory_extension.id")
 
 class Model:
     def __init__(self: Self, character_id: uuid) -> None:
@@ -50,8 +31,8 @@ class Model:
 
     def add(self: Self, item_id: uuid, amount: int = 1) -> None:
         """Modify the item with the item_id passed as argument."""
-        # TODO add data verfication using pydantic
-        item_c = Items()
+        # TODO add data verfication using pydantic  # noqa: FIX002, TD002, TD003, TD004
+        item_c = Item()
         item = item_c.load(item_id)
         if self.check_stored(item_id):
             if item["stackable"]:

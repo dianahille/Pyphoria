@@ -11,7 +11,7 @@ license = { text = "MIT License" }
 name = "pyphoria"
 version = "0.1.0"
 description = ""
-authors = ["Oluf Lorenzen <finkregh@mafia-server.net>"]
+authors = ["Diana", "Max", "Oluf"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
