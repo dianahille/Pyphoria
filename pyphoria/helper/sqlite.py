@@ -19,7 +19,6 @@ logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
 engine = create_engine(sqlite_url, echo=False)
 
 
-
 def clear_db():  # noqa: ANN201, D103
     with Session(engine) as session, contextlib.suppress(
         sqlalchemy.exc.OperationalError,
@@ -165,7 +164,7 @@ def create_stuff():
         name="Peter",
         surname="Parker",
         level=1,
-        experience=0,
+        experience=1,
         energy=10,
         inventory_id=peter_inventory.id,
         strength=1,
@@ -183,7 +182,7 @@ def create_stuff():
         name="Jaqueline",
         surname="Smith",
         level=1,
-        experience=0,
+        experience=1,
         energy=10,
         inventory_id=jaqueline_inventory.id,
         strength=1,
