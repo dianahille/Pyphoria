@@ -11,10 +11,13 @@ from pyphoria.models import Character, Inventory, Item, Monster, Planet, Species
 SQLITE_DB = "database.db"
 sqlite_url = f"sqlite:///{SQLITE_DB}"
 
-engine = create_engine(sqlite_url, echo=True)
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
+logging.getLogger("sqlalchemy.engine").setLevel(logging.WARNING)
+
+engine = create_engine(sqlite_url, echo=False)
+
 
 
 def clear_db():  # noqa: ANN201, D103
@@ -148,19 +151,12 @@ def create_stuff():
     session.add(alien)
     session.commit()
 
-    # def create_characters():
     peter_inventory = Inventory(
-        # character_id=1,
         slots=10,
-        # items=[gun.id],
-        items=[],
         gold=110,
     )
     jaqueline_inventory = Inventory(
-        # character_id=2,
         slots=10,
-        # items=[sword.id],
-        items=[],
         gold=120,
     )
 
@@ -204,6 +200,11 @@ def create_stuff():
     session.add(jaqueline_inventory)
     session.add(peter)
     session.add(jaqueline)
+    peter_inventory.items.append(gun)
+    jaqueline_inventory.items = [sword, gun]
+    print("Jaqueline inventory items:")
+    for _item in jaqueline_inventory.items:
+        print("- " + _item.name)
     session.commit()
 
 

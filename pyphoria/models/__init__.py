@@ -1,5 +1,5 @@
 import uuid
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING
 
 from pydantic import (
     ConfigDict,
@@ -27,7 +27,7 @@ class CharacterStats(SQLModel, table=False):  # noqa: D101
 
 class Species(CharacterStats, table=True):  # noqa: D101
     id: uuid.UUID = Field(
-        default_factory=lambda: str(uuid.uuid4()),
+        default_factory=uuid.uuid4,
         primary_key=True,
         index=True,
         nullable=False,
@@ -43,7 +43,7 @@ class Species(CharacterStats, table=True):  # noqa: D101
 class Character(CharacterStats, table=True):  # noqa: D101
     # id: Uuid = Field(default_factory=uuid.uuid4, primary_key=True, unique=True)
     id: uuid.UUID = Field(
-        default_factory=lambda: str(uuid.uuid4()),
+        default_factory=uuid.uuid4,
         primary_key=True,
         index=True,
         nullable=False,
@@ -64,24 +64,31 @@ class Character(CharacterStats, table=True):  # noqa: D101
 
 class InventoryExtension(SQLModel, table=True):  # noqa: D101
     id: uuid.UUID = Field(
-        default_factory=lambda: str(uuid.uuid4()), primary_key=True, unique=True,
+        default_factory=uuid.uuid4,
+        primary_key=True,
+        unique=True,
     )
     slots: PositiveInt
     name: str = Field(max_length=50, unique=True, index=True)
     description: str
     icon: str
 
+class InventoryItemLink(SQLModel, table=True):
+    inventory_id: uuid.UUID = Field(foreign_key="inventory.id", primary_key=True)
+    item_id: uuid.UUID = Field(foreign_key="item.id", primary_key=True)
+
 
 class Inventory(SQLModel, table=True):  # noqa: D101
     id: uuid.UUID = Field(
-        default_factory=lambda: str(uuid.uuid4()), primary_key=True, unique=True,
+        default_factory=uuid.uuid4,
+        primary_key=True,
+        unique=True,
     )
     slots: PositiveInt
     gold: PositiveInt
-    items: List["Item"] = Relationship(back_populates="inventory")
-    # items: List["Item"]# = Relationship()
-    #    back_populates="inventory", link_model=InventoryItemLink,
-    # )
+    items: list["Item"] = Relationship(
+       back_populates="inventories", link_model=InventoryItemLink,
+    )
     # extensions: List["InventoryExtension"] = Relationship(
     #    back_populates="inventory",
     #    link_model=InventoryExtensionLink,
@@ -100,8 +107,8 @@ class ItemRequirements(SQLModel, table=False):  # noqa: D101
     requirement_strength: PositiveInt
 
 
-class Item(SQLModel, ItemDamage, ItemRequirements, table=True):  # noqa: D101
-    id: uuid.UUID = Field(default_factory=lambda: str(uuid.uuid4()), primary_key=True)
+class Item(ItemDamage, ItemRequirements, table=True):  # noqa: D101
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     name: str = Field(max_length=50, unique=True, index=True)
     type: str
     description: str
@@ -110,17 +117,14 @@ class Item(SQLModel, ItemDamage, ItemRequirements, table=True):  # noqa: D101
     unique_store: bool
     unique_equipped: bool
     icon: str
-    inventory_id: Optional[uuid.UUID] = Field( # noqa: UP007
-        default=None, foreign_key="inventory.id",
-    )
-    inventory = Optional[Inventory] = Relationship( # noqa: UP007
-        back_populates="items",
-    )
+    inventories: list["Inventory"] = Relationship(back_populates="items", link_model=InventoryItemLink)
 
 
 class Monster(SQLModel, table=True):  # noqa: D101
     id: uuid.UUID = Field(
-        default_factory=lambda: str(uuid.uuid4()), primary_key=True, unique=True,
+        default_factory=uuid.uuid4,
+        primary_key=True,
+        unique=True,
     )
     name: str = Field(max_length=50, unique=True, index=True)
     description: str
@@ -133,7 +137,9 @@ class Planet(SQLModel, table=True):
     """Planet model."""  # noqa: D203
 
     id: uuid.UUID = Field(
-        default_factory=lambda: str(uuid.uuid4()), primary_key=True, unique=True,
+        default_factory=uuid.uuid4,
+        primary_key=True,
+        unique=True,
     )
     name: str = Field(max_length=50, unique=True, index=True)
     description: str
