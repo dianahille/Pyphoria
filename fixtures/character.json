@@ -1,0 +1,27 @@
+{
+    "character_id": "character_id",
+    "name": "name",
+    "surname": "surname",
+    "experience": "experience",
+    "level": "level",
+    "fame": "fame",
+    "stats": {
+        "vitality": "vitality",
+        "#luck": "Erhöht die Chance bessere Items zu craften oder zu finden, erhöht ebenfalls die Crit-Chance",
+        "luck": "luck",
+        "intelligence": "intelligence",
+        "#combat": "Generische Kampfstärke (Nahkampf, Fernkampf, Magie)",
+        "combat": "combat",
+        "hit_rating": "hit_rating",
+        "#hit_rating": "base_hit_rating für $waffentyp + charakter hit_rating (+ item_stats hit rating, nötig für besonders schwere gegner)",
+        "#social_skills": "Bezieht sich auf Erfahrung/Geld für Posts, sollte einen festen Oberwert haben",
+        "social_skills": "social_skills"
+    },
+    "defence": {
+        "armor": "armor",
+        "resistance": {"fire": "fire", "ice": "ice", "poison": "poison", "electric": "electric", "dark": "dark", "light": "light"},
+        "shield": "shield",
+        "dodge": "dodge",
+        "block": "block"
+    }
+}

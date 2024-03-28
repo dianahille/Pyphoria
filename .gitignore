@@ -1,0 +1,5 @@
+/data
+*.pyc
+.gitconfig
+__pycache__
+.ruff_cache

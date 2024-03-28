@@ -1,0 +1,61 @@
+[project]
+name = "pyphoria"
+description = "fixme"
+version = "0.0.1"
+
+readme = "README.md"
+authors = [{ name = "Diana" }, { name = "Max" }, { name = "Oluf" }]
+license = { text = "MIT License" }
+
+[tool.poetry]
+name = "pyphoria"
+version = "0.1.0"
+description = ""
+authors = ["Diana", "Max", "Oluf"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+sqlmodel = "^0.0.16"
+fastapi = "^0.110.0"
+
+
+[tool.poetry.group.dev.dependencies]
+uvicorn = {extras = ["standard"], version = "^0.29.0"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+# Same as Black.
+line-length = 88
+indent-width = 4
+
+target-version = "py311"
+
+
+[tool.ruff.format]
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
+[tool.ruff.lint]
+fixable = ["ALL"]
+select = ["ALL"]
+
+ignore = [
+    "D407",   # Missing dashed underline after section ("Returns") # formatting docstrings
+    "FA102",  # future-required-type-annotation (FA102) # we dont use old python
+    "UP015",  # Unnecessary open mode parameters
+    "PTH123", # `open()` should be replaced by `Path.open()`
+    "E501",   # line too long, handled by black
+    "D211",   # no-blank-line-before-class
+    "D212",   # multi-line-summary-first-line
+]
+[tool.ruff.lint.per-file-ignores]
+"pyphoria/models/*" = [
+    "UP035",
+    "UP006", # Use `list` instead of `List` for type annotation # required for sqlmodel
+]
