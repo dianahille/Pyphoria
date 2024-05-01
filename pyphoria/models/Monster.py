@@ -19,6 +19,7 @@ class Model:
     def create(
         self: Self,
         name: str,
+        type: str,
         description: str,
         level: int = 1,
         base_damage: int = 1,
@@ -32,6 +33,7 @@ class Model:
             description=description,
             level=level,
             base_damage=base_damage,
+            type=type,
             icon=icon,
         ).model_dump()
         self.save()
